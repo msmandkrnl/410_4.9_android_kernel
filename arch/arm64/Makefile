@@ -62,6 +62,8 @@ LD		+= -EL
 UTS_MACHINE	:= aarch64
 endif
 
+comma = ,
+
 CHECKFLAGS	+= -D__aarch64__
 
 ifeq ($(CONFIG_ARM64_MODULE_CMODEL_LARGE), y)
@@ -118,7 +120,7 @@ all:	$(KBUILD_IMAGE) $(KBUILD_DTBS)
 
 boot := arch/arm64/boot
 
-Image: vmlinux
+Image Image.gz: vmlinux
 	$(Q)$(MAKE) $(build)=$(boot) $(boot)/$@
 
 Image.%: Image
@@ -134,6 +136,7 @@ PHONY += dtbs dtbs_install
 
 dtbs: prepare scripts
 	$(Q)$(MAKE) $(build)=$(boot)/dts
+	$(Q)$(MAKE) $(build)=$(boot)/dts/qcom dtbs
 
 dtbs_install:
 	$(Q)$(MAKE) $(dtbinst)=$(boot)/dts
