@@ -184,7 +184,7 @@ extern void __iomem *ioremap_cache(phys_addr_t phys_addr, size_t size);
 #define iowrite32be(v,p)	({ __iowmb(); __raw_writel((__force __u32)cpu_to_be32(v), p); })
 #define iowrite64be(v,p)	({ __iowmb(); __raw_writeq((__force __u64)cpu_to_be64(v), p); })
 
-#include <asm-generic/io.h>
+//#include <asm-generic/io.h>
 
 /*
  * More restrictive address range checking than the default implementation
