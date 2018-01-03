@@ -44,6 +44,8 @@
 #include <asm/memblock.h>
 #include <asm/mmu_context.h>
 
+#include <linux/vmalloc.h> /* To fix linking issues of "VMAP"*/
+
 u64 idmap_t0sz = TCR_T0SZ(VA_BITS);
 
 u64 kimage_voffset __ro_after_init;
