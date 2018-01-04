@@ -18,6 +18,7 @@
 #include "pci-quirks.h"
 #include "xhci-ext-caps.h"
 
+#include <asm/io.h>
 
 #define UHCI_USBLEGSUP		0xc0		/* legacy support */
 #define UHCI_USBCMD		0		/* command register */

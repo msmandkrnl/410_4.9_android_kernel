@@ -203,5 +203,50 @@ extern bool xen_biovec_phys_mergeable(const struct bio_vec *vec1,
 	(__BIOVEC_PHYS_MERGEABLE(vec1, vec2) &&				\
 	 (!xen_domain() || xen_biovec_phys_mergeable(vec1, vec2)))
 
+
+
+/********************************************/
+// Arch changes //
+
+#define inb_p           inb
+#define inw_p           inw
+#define inl_p           inl
+#define outb_p          outb
+#define outw_p          outw
+#define outl_p          outl
+
+extern u8 inb(unsigned long port)
+{
+        return readb(&port);
+}
+
+extern u16 inw(unsigned long port)
+{
+        return readw(&port);
+}
+
+extern u32 inl(unsigned long port)
+{
+        return readl(&port);
+}
+
+extern void outb(u8 b, unsigned long port)
+{
+        writeb(b, &port);
+}
+
+extern void outw(u16 b, unsigned long port)
+{
+        writew(b, &port);
+}
+
+extern void outl(u32 b, unsigned long port)
+{
+        writel(b, &port);
+}
+
+/*******************************************/
+
+
 #endif	/* __KERNEL__ */
 #endif	/* __ASM_IO_H */

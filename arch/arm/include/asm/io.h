@@ -448,7 +448,7 @@ extern void pci_iounmap(struct pci_dev *dev, void __iomem *addr);
  */
 #define xlate_dev_kmem_ptr(p)	p
 
-#include <asm-generic/io.h>
+//#include <asm-generic/io.h>
 
 /*
  * can the hardware map this into one segment or not, given no other

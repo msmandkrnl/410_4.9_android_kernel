@@ -22,6 +22,7 @@
 #include <asm/vga.h>
 #include <asm/byteorder.h>
 
+#include <asm/io.h>
 
 /* Some of the code below is taken from SVGAlib.  The original,
    unmodified copyright notice for that code is below. */
