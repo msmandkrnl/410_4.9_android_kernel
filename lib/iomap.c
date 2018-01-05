@@ -5,7 +5,7 @@
  */
 #include <linux/pci.h>
 #include <linux/io.h>
-//#include <asm/io.h>
+#include <asm/io.h>
 
 #include <linux/export.h>
 

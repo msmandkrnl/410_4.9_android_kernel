@@ -215,35 +215,18 @@ extern bool xen_biovec_phys_mergeable(const struct bio_vec *vec1,
 #define outw_p          outw
 #define outl_p          outl
 
-extern u8 inb(unsigned long port)
-{
-        return readb(&port);
-}
 
-extern u16 inw(unsigned long port)
-{
-        return readw(&port);
-}
+#define outb(v,p)       ({ __iowmb(); __raw_writeb(v,__io(p)); })
+#define outw(v,p)       ({ __iowmb(); __raw_writew((__force __u16) \
+                                        cpu_to_le16(v),__io(p)); })
+#define outl(v,p)       ({ __iowmb(); __raw_writel((__force __u32) \
+                                        cpu_to_le32(v),__io(p)); })
 
-extern u32 inl(unsigned long port)
-{
-        return readl(&port);
-}
-
-extern void outb(u8 b, unsigned long port)
-{
-        writeb(b, &port);
-}
-
-extern void outw(u16 b, unsigned long port)
-{
-        writew(b, &port);
-}
-
-extern void outl(u32 b, unsigned long port)
-{
-        writel(b, &port);
-}
+#define inb(p)  ({ __u8 __v = __raw_readb(__io(p)); __iormb(); __v; })
+#define inw(p)  ({ __u16 __v = le16_to_cpu((__force __le16) \
+                        __raw_readw(__io(p))); __iormb(); __v; })
+#define inl(p)  ({ __u32 __v = le32_to_cpu((__force __le32) \
+                        __raw_readl(__io(p))); __iormb(); __v; })
 
 /*******************************************/
 
