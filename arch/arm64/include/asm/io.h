@@ -208,6 +208,16 @@ extern bool xen_biovec_phys_mergeable(const struct bio_vec *vec1,
 /********************************************/
 // Arch changes //
 
+/*
+ * A typesafe __io() helper
+ */
+static inline void __iomem *__typesafe_io(unsigned long addr)
+{
+        return (void __iomem *)addr;
+}
+
+#define __io(a)         __typesafe_io((a))
+
 #define inb_p           inb
 #define inw_p           inw
 #define inl_p           inl
