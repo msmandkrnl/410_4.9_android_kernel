@@ -208,6 +208,12 @@ extern bool xen_biovec_phys_mergeable(const struct bio_vec *vec1,
 /********************************************/
 // Arch changes //
 
+struct pci_dev;
+
+#define pci_iounmap pci_iounmap
+extern void pci_iounmap(struct pci_dev *dev, void __iomem *addr);
+
+
 /*
  * A typesafe __io() helper
  */
