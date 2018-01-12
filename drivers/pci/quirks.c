@@ -30,7 +30,7 @@
 
 
 #include <asm-generic/pci_iomap.h> // To fix pci_ioport linker issues
-//#include <asm-generic/io.h>
+#include <asm/io.h>
 
 /*
  * Decoding should be disabled for a PCI device during BAR sizing to avoid

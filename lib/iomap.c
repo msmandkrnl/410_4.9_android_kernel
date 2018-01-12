@@ -74,30 +74,32 @@ unsigned int ioread8(void __iomem *addr)
 	IO_COND(addr, return inb(port), return readb(addr));
 	return 0xff;
 }
+#if 0
 unsigned int ioread16(void __iomem *addr)
 {
 	IO_COND(addr, return inw(port), return readw(addr));
 	return 0xffff;
 }
-/*unsigned int ioread16be(void __iomem *addr)
+unsigned int ioread16be(void __iomem *addr)
 {
 	IO_COND(addr, return pio_read16be(port), return mmio_read16be(addr));
 	return 0xffff;
-}*/
+}
 unsigned int ioread32(void __iomem *addr)
 {
 	IO_COND(addr, return inl(port), return readl(addr));
 	return 0xffffffff;
 }
-/*unsigned int ioread32be(void __iomem *addr)
+unsigned int ioread32be(void __iomem *addr)
 {
 	IO_COND(addr, return pio_read32be(port), return mmio_read32be(addr));
 	return 0xffffffff;
-}*/
+}
+#endif
 EXPORT_SYMBOL(ioread8);
-EXPORT_SYMBOL(ioread16);
+//EXPORT_SYMBOL(ioread16);
 //EXPORT_SYMBOL(ioread16be);
-EXPORT_SYMBOL(ioread32);
+//EXPORT_SYMBOL(ioread32);
 //EXPORT_SYMBOL(ioread32be);
 
 #ifndef pio_write16be
@@ -114,26 +116,28 @@ void iowrite8(u8 val, void __iomem *addr)
 {
 	IO_COND(addr, outb(val,port), writeb(val, addr));
 }
+#if 0
 void iowrite16(u16 val, void __iomem *addr)
 {
 	IO_COND(addr, outw(val,port), writew(val, addr));
 }
-/*void iowrite16be(u16 val, void __iomem *addr)
+void iowrite16be(u16 val, void __iomem *addr)
 {
 	IO_COND(addr, pio_write16be(val,port), mmio_write16be(val, addr));
-}*/
+}
 void iowrite32(u32 val, void __iomem *addr)
 {
 	IO_COND(addr, outl(val,port), writel(val, addr));
 }
-/*void iowrite32be(u32 val, void __iomem *addr)
+void iowrite32be(u32 val, void __iomem *addr)
 {
 	IO_COND(addr, pio_write32be(val,port), mmio_write32be(val, addr));
-}*/
+}
+#endif
 EXPORT_SYMBOL(iowrite8);
-EXPORT_SYMBOL(iowrite16);
+//EXPORT_SYMBOL(iowrite16);
 //EXPORT_SYMBOL(iowrite16be);
-EXPORT_SYMBOL(iowrite32);
+//EXPORT_SYMBOL(iowrite32);
 //EXPORT_SYMBOL(iowrite32be);
 
 /*

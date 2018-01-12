@@ -8,6 +8,9 @@
 
 #include <linux/export.h>
 
+
+#include <asm-generic/pci_iomap.h>
+
 #ifdef CONFIG_PCI
 /**
  * pci_iomap_range - create a virtual mapping cookie for a PCI BAR

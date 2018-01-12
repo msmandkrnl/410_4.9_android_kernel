@@ -184,6 +184,19 @@ extern void __iomem *ioremap_cache(phys_addr_t phys_addr, size_t size);
 #define iowrite32be(v,p)	({ __iowmb(); __raw_writel((__force __u32)cpu_to_be32(v), p); })
 #define iowrite64be(v,p)	({ __iowmb(); __raw_writeq((__force __u64)cpu_to_be64(v), p); })
 
+
+
+/*
+ * io{read,write}{16,32,64}() macros
+ */
+#define ioread16(p) ioread16be(p)
+#define ioread32(p) ioread32be(p)
+#define ioread64(p) ioread64be(p)
+
+#define iowrite16(v,p)	iowrite16be(v,p)
+#define iowrite32(v,p)	iowrite32be(v,p)
+#define iowrite64(v,p)	iowrite64be(v,p)
+
 //#include <asm-generic/io.h>
 
 /*
@@ -206,6 +219,22 @@ extern bool xen_biovec_phys_mergeable(const struct bio_vec *vec1,
 
 
 /********************************************/
+
+// Mem changes //
+
+/*
+ * Convert a physical pointer to a virtual kernel pointer for /dev/mem
+ * access
+ */
+#define xlate_dev_mem_ptr(p)    __va(p)
+
+/*
+ * Convert a virtual cached pointer to an uncached pointer
+ */
+#define xlate_dev_kmem_ptr(p)   p
+
+
+
 // Arch changes //
 
 struct pci_dev;
