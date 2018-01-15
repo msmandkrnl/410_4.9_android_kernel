@@ -816,6 +816,10 @@ const char *of_clk_get_parent_name(struct device_node *np, int index);
 int of_clk_detect_critical(struct device_node *np, int index,
 			    unsigned long *flags);
 void of_clk_init(const struct of_device_id *matches);
+static inline void __init of_clk_init(const struct of_device_id *matches)
+{
+   return;
+}
 
 #else /* !CONFIG_OF */
 
