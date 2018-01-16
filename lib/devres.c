@@ -5,6 +5,7 @@
 #include <linux/export.h>
 
 #include <asm/io.h>
+#include <asm-generic/pci_iomap.h>
 
 void devm_ioremap_release(struct device *dev, void *res)
 {

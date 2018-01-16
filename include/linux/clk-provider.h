@@ -816,10 +816,6 @@ const char *of_clk_get_parent_name(struct device_node *np, int index);
 int of_clk_detect_critical(struct device_node *np, int index,
 			    unsigned long *flags);
 void of_clk_init(const struct of_device_id *matches);
-static inline void __init of_clk_init(const struct of_device_id *matches)
-{
-   return;
-}
 
 #else /* !CONFIG_OF */
 
@@ -877,7 +873,7 @@ static inline int of_clk_detect_critical(struct device_node *np, int index,
 {
 	return 0;
 }
-static inline void of_clk_init(const struct of_device_id *matches) {}
+//static inline void __init of_clk_init(const struct of_device_id *matches) {}
 #endif /* CONFIG_OF */
 
 /*
@@ -917,4 +913,5 @@ struct dentry *clk_debugfs_add_file(struct clk_hw *hw, char *name, umode_t mode,
 #endif
 
 #endif /* CONFIG_COMMON_CLK */
+static inline void __init of_clk_init(const struct of_device_id *matches) {}
 #endif /* CLK_PROVIDER_H */
