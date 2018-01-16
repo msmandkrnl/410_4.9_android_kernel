@@ -4,6 +4,8 @@
 #include <linux/gfp.h>
 #include <linux/export.h>
 
+#include <asm/io.h>
+
 void devm_ioremap_release(struct device *dev, void *res)
 {
 	iounmap(*(void __iomem **)res);

@@ -163,4 +163,9 @@ static inline void arch_io_free_memtype_wc(resource_size_t base,
 }
 #endif
 
+// ioport and unport declarations < mm/iomap>
+
+void __iomem *ioport_map(unsigned long port, unsigned int nr);
+void ioport_unmap(void __iomem *addr);
+
 #endif /* _LINUX_IO_H */

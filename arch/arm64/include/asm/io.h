@@ -273,6 +273,156 @@ static inline void __iomem *__typesafe_io(unsigned long addr)
 #define inl(p)  ({ __u32 __v = le32_to_cpu((__force __le32) \
                         __raw_readl(__io(p))); __iormb(); __v; })
 
+
+
+/*
+ * {read,write}s{b,w,l,q}() repeatedly access the same memory address in
+ * native endianness in 8-, 16-, 32- or 64-bit chunks (@count times).
+ */
+
+static inline void readsb(const volatile void __iomem *addr, void *buffer,
+                          unsigned int count)
+{
+        if (count) {
+                u8 *buf = buffer;
+
+                do {
+                        u8 x = __raw_readb(addr);
+                        *buf++ = x;
+                } while (--count);
+        }
+}
+
+static inline void readsw(const volatile void __iomem *addr, void *buffer,
+                          unsigned int count)
+{
+        if (count) {
+                u16 *buf = buffer;
+
+                do {
+                        u16 x = __raw_readw(addr);
+                        *buf++ = x;
+                } while (--count);
+        }
+}
+
+static inline void readsl(const volatile void __iomem *addr, void *buffer,
+                          unsigned int count)
+{
+        if (count) {
+                u32 *buf = buffer;
+
+                do {
+                        u32 x = __raw_readl(addr);
+                        *buf++ = x;
+                } while (--count);
+        }
+}
+
+static inline void readsq(const volatile void __iomem *addr, void *buffer,
+                          unsigned int count)
+{
+        if (count) {
+                u64 *buf = buffer;
+
+                do {
+                        u64 x = __raw_readq(addr);
+                        *buf++ = x;
+                } while (--count);
+        }
+}
+
+static inline void writesb(volatile void __iomem *addr, const void *buffer,
+                           unsigned int count)
+{
+        if (count) {
+                const u8 *buf = buffer;
+
+                do {
+                        __raw_writeb(*buf++, addr);
+                } while (--count);
+        }
+}
+
+static inline void writesw(volatile void __iomem *addr, const void *buffer,
+                           unsigned int count)
+{
+        if (count) {
+                const u16 *buf = buffer;
+
+                do {
+                        __raw_writew(*buf++, addr);
+                } while (--count);
+        }
+}
+
+
+static inline void writesl(volatile void __iomem *addr, const void *buffer,
+                           unsigned int count)
+{
+        if (count) {
+                const u32 *buf = buffer;
+
+                do {
+                        __raw_writel(*buf++, addr);
+                } while (--count);
+        }
+}
+
+static inline void writesq(volatile void __iomem *addr, const void *buffer,
+                           unsigned int count)
+{
+        if (count) {
+                const u64 *buf = buffer;
+
+                do {
+                        __raw_writeq(*buf++, addr);
+                } while (--count);
+        }
+}
+
+
+
+////// in or read
+
+
+static inline void insb(unsigned long addr, void *buffer, unsigned int count)
+{
+        readsb(PCI_IOBASE + addr, buffer, count);
+}
+
+static inline void insw(unsigned long addr, void *buffer, unsigned int count)
+{
+        readsw(PCI_IOBASE + addr, buffer, count);
+}
+
+
+static inline void insl(unsigned long addr, void *buffer, unsigned int count)
+{
+        readsl(PCI_IOBASE + addr, buffer, count);
+}
+
+
+////// out or write
+
+static inline void outsb(unsigned long addr, const void *buffer,
+                         unsigned int count)
+{
+        writesb(PCI_IOBASE + addr, buffer, count);
+}
+
+static inline void outsw(unsigned long addr, const void *buffer,
+                         unsigned int count)
+{
+        writesw(PCI_IOBASE + addr, buffer, count);
+}
+
+static inline void outsl(unsigned long addr, const void *buffer,
+                         unsigned int count)
+{
+        writesl(PCI_IOBASE + addr, buffer, count);
+}
+
 /*******************************************/
 
 
