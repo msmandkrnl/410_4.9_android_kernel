@@ -5,6 +5,10 @@ if MIPS
 source "drivers/platform/mips/Kconfig"
 endif
 
+if ARCH_MSM
+source "drivers/platform/msm/Kconfig"
+endif
+
 source "drivers/platform/goldfish/Kconfig"
 
 source "drivers/platform/chrome/Kconfig"
