@@ -29,6 +29,7 @@
 #include <linux/tracehook.h>
 #include <linux/errno.h>
 #include <linux/sched.h>
+#include <linux/security.h>
 #include <linux/lsm_hooks.h>
 #include <linux/xattr.h>
 #include <linux/capability.h>
@@ -83,8 +84,11 @@
 #include <linux/export.h>
 #include <linux/msg.h>
 #include <linux/shm.h>
+#include <linux/pft.h>
 #include <linux/bpf.h>
 
+#include "flask.h"
+#include "av_permissions.h"
 #include "avc.h"
 #include "objsec.h"
 #include "netif.h"

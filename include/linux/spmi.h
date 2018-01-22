@@ -38,6 +38,8 @@
 #define SPMI_CMD_READ			0x60
 #define SPMI_CMD_ZERO_WRITE		0x80
 
+struct spmi_device;
+
 /**
  * struct spmi_device - Basic representation of an SPMI device
  * @dev:	Driver model representation of the device.
@@ -128,7 +130,22 @@ static inline void spmi_controller_put(struct spmi_controller *ctrl)
 int spmi_controller_add(struct spmi_controller *ctrl);
 void spmi_controller_remove(struct spmi_controller *ctrl);
 
+
+
 /**
+ * spmi_ext_register_readl() - extended register read long
+ * @ctrl: SPMI controller.
+ * @sid: slave identifier.
+ * @ad: slave register address (16-bit address).
+ * @len: the request number of bytes to read (up to 8 bytes).
+ * @buf: buffer to be populated with data from the Slave.
+ *
+ * Reads up to 8 bytes of data from the extended register space on a
+ * Slave device using 16-bit address.
+ */
+//extern int spmi_ext_register_readl(struct spmi_controller *ctrl, u8 sid, u16 ad, u8 *buf, int len);
+
+/**					
  * struct spmi_driver - SPMI slave device driver
  * @driver:	SPMI device drivers should initialize name and owner field of
  *		this structure.
@@ -142,6 +159,22 @@ void spmi_controller_remove(struct spmi_controller *ctrl);
  * transitioning the slave into the SLEEP state.  On runtime_resume(), a WAKEUP
  * command is sent to the slave to bring it back to ACTIVE.
  */
+
+/**
+ * spmi_for_each_container_dev - iterate over the array of devnode resources.
+ * @res: spmi_resource pointer used as the array cursor
+ * @spmi_dev: spmi_device to iterate
+ *
+ * Only useable in spmi-dev-container configurations.
+ */
+#define spmi_for_each_container_dev(res, spmi_dev)			      \
+	for (res = ((spmi_dev)->dev_node ? &(spmi_dev)->dev_node[0] : NULL);  \
+	     (res - (spmi_dev)->dev_node) < (spmi_dev)->num_dev_node; res++)
+
+extern struct resource *spmi_get_resource(struct spmi_device *dev,
+				      struct spmi_resource *node,
+				      unsigned int type, unsigned int res_num);
+
 struct spmi_driver {
 	struct device_driver driver;
 	int	(*probe)(struct spmi_device *sdev);
@@ -174,8 +207,7 @@ static inline void spmi_driver_unregister(struct spmi_driver *sdrv)
 int spmi_register_read(struct spmi_device *sdev, u8 addr, u8 *buf);
 int spmi_ext_register_read(struct spmi_device *sdev, u8 addr, u8 *buf,
 			   size_t len);
-int spmi_ext_register_readl(struct spmi_device *sdev, u16 addr, u8 *buf,
-			    size_t len);
+int spmi_ext_register_readl(struct spmi_device *sdev, u16 addr, u8 *buf, size_t len);
 int spmi_register_write(struct spmi_device *sdev, u8 addr, u8 data);
 int spmi_register_zero_write(struct spmi_device *sdev, u8 data);
 int spmi_ext_register_write(struct spmi_device *sdev, u8 addr,

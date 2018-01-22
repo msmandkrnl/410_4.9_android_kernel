@@ -62,7 +62,7 @@ static u8 qpnp_read_byte(struct spmi_device *spmi, u16 addr)
 	int rc;
 	u8 val;
 
-	rc = spmi_ext_register_readl(spmi->ctrl, spmi->sid, addr, &val, 1);
+	rc = spmi_ext_register_readl(spmi->ctrl, addr, &val, 1);
 	if (rc) {
 		pr_err("SPMI read failed rc=%d\n", rc);
 		return 0;
@@ -182,7 +182,7 @@ static int qpnp_revid_probe(struct spmi_device *spmi)
 	option3 = (pmic_status >> 4) & 0x3;
 	option4 = (pmic_status >> 6) & 0x3;
 
-	build_pmic_string(pmic_string, PMIC_STRING_MAXLENGTH, spmi->sid,
+	build_pmic_string(pmic_string, PMIC_STRING_MAXLENGTH, spmi->usid,
 			pmic_subtype, rev1, rev2, rev3, rev4);
 	pr_info("%s options: %d, %d, %d, %d\n",
 			pmic_string, option1, option2, option3, option4);

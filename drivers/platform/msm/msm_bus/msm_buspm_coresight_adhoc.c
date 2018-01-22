@@ -145,7 +145,7 @@ int msmbus_coresight_init_adhoc(struct platform_device *pdev,
 		drvdata->dev = &pdev->dev;
 		platform_set_drvdata(pdev, drvdata);
 	}
-	ret = buspm_of_get_clk_adhoc(of_node, drvdata, pdata->id);
+	ret = buspm_of_get_clk_adhoc(of_node, drvdata, pdata->cpu);
 	if (ret) {
 		pr_err("Error getting clocks\n");
 		ret = -ENXIO;

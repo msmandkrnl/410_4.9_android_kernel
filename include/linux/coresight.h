@@ -125,6 +125,7 @@ struct coresight_desc {
 	struct coresight_platform_data *pdata;
 	struct device *dev;
 	const struct attribute_group **groups;
+	struct module *owner;
 };
 
 /**
@@ -160,6 +161,7 @@ struct coresight_connection {
 		happens when a source has been selected for that it.
  */
 struct coresight_device {
+	int id;
 	struct coresight_connection *conns;
 	int nr_inport;
 	int nr_outport;
@@ -167,6 +169,7 @@ struct coresight_device {
 	struct coresight_dev_subtype subtype;
 	const struct coresight_ops *ops;
 	struct device dev;
+	struct module *owner;
 	atomic_t *refcnt;
 	bool orphan;
 	bool enable;	/* true only if configured as part of a path */
