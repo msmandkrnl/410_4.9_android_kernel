@@ -888,6 +888,7 @@ struct file {
 		struct rcu_head 	fu_rcuhead;
 	} f_u;
 	struct path		f_path;
+#define f_dentry	f_path.dentry
 	struct inode		*f_inode;	/* cached value */
 	const struct file_operations	*f_op;
 
@@ -1767,6 +1768,8 @@ struct inode_operations {
 	int (*setattr) (struct dentry *, struct iattr *);
 	int (*setattr2) (struct vfsmount *, struct dentry *, struct iattr *);
 	int (*getattr) (struct vfsmount *mnt, struct dentry *, struct kstat *);
+	int (*setxattr) (struct dentry *, const char *,const void *,size_t,int);
+	ssize_t (*getxattr) (struct dentry *, const char *, void *, size_t);
 	ssize_t (*listxattr) (struct dentry *, char *, size_t);
 	int (*fiemap)(struct inode *, struct fiemap_extent_info *, u64 start,
 		      u64 len);
@@ -2924,7 +2927,7 @@ static inline void inode_dio_end(struct inode *inode)
 	if (atomic_dec_and_test(&inode->i_dio_count))
 		wake_up_bit(&inode->i_state, __I_DIO_WAKEUP);
 }
-
+struct inode *dio_bio_get_inode(struct bio *bio);
 extern void inode_set_flags(struct inode *inode, unsigned int flags,
 			    unsigned int mask);
 
