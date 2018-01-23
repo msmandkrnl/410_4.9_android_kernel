@@ -66,6 +66,13 @@ struct bio {
 #endif
 	};
 
+	/*
+	 * When using dircet-io (O_DIRECT), we can't get the inode from a bio
+	 * by walking bio->bi_io_vec->bv_page->mapping->host
+	 * since the page is anon.
+	 */
+	struct inode		*bi_dio_inode;
+
 	unsigned short		bi_vcnt;	/* how many bio_vec's */
 
 	/*

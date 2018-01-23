@@ -3,7 +3,7 @@
 #
 
 ccflags-y += -Idrivers/misc/
-ccflags-y += -Isecurity/selinux -Isecurity/selinux/include -Wno-error=date-time 
+ccflags-y += -Isecurity/selinux -Isecurity/selinux/include
 
 obj-$(CONFIG_MSM_BUS_SCALING) += msm_bus/
 obj-$(CONFIG_BUS_TOPOLOGY_ADHOC) += msm_bus/
