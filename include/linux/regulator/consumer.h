@@ -97,6 +97,7 @@ struct regmap;
  * VOLTAGE_CHANGE Regulator voltage changed.
  *                Data passed is old voltage cast to (void *).
  * DISABLE        Regulator was disabled.
+ * ENABLE         Regulator was enabled.
  * PRE_VOLTAGE_CHANGE   Regulator is about to have voltage changed.
  *                      Data passed is "struct pre_voltage_change_data"
  * ABORT_VOLTAGE_CHANGE Regulator voltage change failed for some reason.
@@ -115,6 +116,7 @@ struct regmap;
 #define REGULATOR_EVENT_FORCE_DISABLE		0x20
 #define REGULATOR_EVENT_VOLTAGE_CHANGE		0x40
 #define REGULATOR_EVENT_DISABLE			0x80
+#define REGULATOR_EVENT_ENABLE			0x100
 #define REGULATOR_EVENT_PRE_VOLTAGE_CHANGE	0x100
 #define REGULATOR_EVENT_ABORT_VOLTAGE_CHANGE	0x200
 #define REGULATOR_EVENT_PRE_DISABLE		0x400
@@ -238,6 +240,7 @@ int regulator_get_current_limit(struct regulator *regulator);
 int regulator_set_mode(struct regulator *regulator, unsigned int mode);
 unsigned int regulator_get_mode(struct regulator *regulator);
 int regulator_set_load(struct regulator *regulator, int load_uA);
+int regulator_set_optimum_mode(struct regulator *regulator, int load_uA);
 
 int regulator_allow_bypass(struct regulator *regulator, bool allow);
 
@@ -473,6 +476,12 @@ static inline int regulator_set_mode(struct regulator *regulator,
 }
 
 static inline unsigned int regulator_get_mode(struct regulator *regulator)
+{
+	return REGULATOR_MODE_NORMAL;
+}
+
+static inline int regulator_set_optimum_mode(struct regulator *regulator,
+					int load_uA)
 {
 	return REGULATOR_MODE_NORMAL;
 }

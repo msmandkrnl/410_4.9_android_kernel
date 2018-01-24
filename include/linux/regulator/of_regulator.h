@@ -16,11 +16,18 @@ struct of_regulator_match {
 	const struct regulator_desc *desc;
 };
 
-#if defined(CONFIG_OF)
+#if defined(CONFIG_OF) && !defined(CONFIG_ARCH_MSM8916)
 extern struct regulator_init_data
 	*of_get_regulator_init_data(struct device *dev,
 				    struct device_node *node,
 				    const struct regulator_desc *desc);
+extern int of_regulator_match(struct device *dev, struct device_node *node,
+			      struct of_regulator_match *matches,
+			      unsigned int num_matches);
+#elif defined(CONFIG_OF) && defined(CONFIG_ARCH_MSM8916)
+extern struct regulator_init_data
+	*of_get_regulator_init_data(struct device *dev,
+				    struct device_node *node);
 extern int of_regulator_match(struct device *dev, struct device_node *node,
 			      struct of_regulator_match *matches,
 			      unsigned int num_matches);

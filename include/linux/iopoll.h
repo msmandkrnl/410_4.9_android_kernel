@@ -93,6 +93,20 @@
 })
 
 
+/**
+ * readl_tight_poll_timeout - Tight-loop on an address until a condition is met or a timeout occurs
+ * @addr: Address to poll
+ * @val: Variable to read the value into
+ * @cond: Break condition (usually involving @val)
+ * @timeout_us: Timeout in us, 0 means never timeout
+ *
+ * Returns 0 on success and -ETIMEDOUT upon a timeout. In either
+ * case, the last read value at @addr is stored in @val. Must not
+ * be called from atomic context if timeout_us is used.
+ */
+#define readl_tight_poll_timeout(addr, val, cond, timeout_us) \
+	readl_poll_timeout(addr, val, cond, 0, timeout_us)
+
 #define readb_poll_timeout(addr, val, cond, delay_us, timeout_us) \
 	readx_poll_timeout(readb, addr, val, cond, delay_us, timeout_us)
 
