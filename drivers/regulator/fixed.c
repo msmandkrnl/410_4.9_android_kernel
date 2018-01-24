@@ -59,7 +59,11 @@ of_get_fixed_voltage_config(struct device *dev,
 	if (!config)
 		return ERR_PTR(-ENOMEM);
 
-	config->init_data = of_get_regulator_init_data(dev, dev->of_node, desc);
+	config->init_data = of_get_regulator_init_data(dev, dev->of_node
+#if !defined(CONFIG_ARCH_MSM8916)
+			                                                , desc
+#endif
+									);
 	if (!config->init_data)
 		return ERR_PTR(-EINVAL);
 

@@ -25,8 +25,12 @@ static const char *const regulator_states[PM_SUSPEND_MAX + 1] = {
 };
 
 static void of_get_regulation_constraints(struct device_node *np,
-					struct regulator_init_data **init_data,
-					const struct regulator_desc *desc)
+					struct regulator_init_data **init_data
+#if !defined(CONFIG_ARCH_MSM8916)
+                                        ,
+					const struct regulator_desc *desc
+#endif
+                                        )
 {
 	struct regulation_constraints *constraints = &(*init_data)->constraints;
 	struct regulator_state *suspend_state;
@@ -100,6 +104,7 @@ static void of_get_regulation_constraints(struct device_node *np,
 	}
 
 	if (!of_property_read_u32(np, "regulator-initial-mode", &pval)) {
+#if !defined(CONFIG_ARCH_MSM8916)
 		if (desc && desc->of_map_mode) {
 			ret = desc->of_map_mode(pval);
 			if (ret == -EINVAL)
@@ -110,6 +115,7 @@ static void of_get_regulation_constraints(struct device_node *np,
 			pr_warn("%s: mapping for mode %d not defined\n",
 				np->name, pval);
 		}
+#endif
 	}
 
 	if (!of_property_read_u32(np, "regulator-system-load", &pval))
@@ -139,6 +145,7 @@ static void of_get_regulation_constraints(struct device_node *np,
 
 		if (!of_property_read_u32(suspend_np, "regulator-mode",
 					  &pval)) {
+#if !defined(CONFIG_ARCH_MSM8916)
 			if (desc && desc->of_map_mode) {
 				ret = desc->of_map_mode(pval);
 				if (ret == -EINVAL)
@@ -150,6 +157,7 @@ static void of_get_regulation_constraints(struct device_node *np,
 				pr_warn("%s: mapping for mode %d not defined\n",
 					np->name, pval);
 			}
+#endif
 		}
 
 		if (of_property_read_bool(suspend_np,
@@ -359,8 +367,11 @@ int of_regulator_match(struct device *dev, struct device_node *node,
 				continue;
 
 			match->init_data =
-				of_get_regulator_init_data(dev, child,
-							   match->desc);
+				of_get_regulator_init_data(dev, child
+#if !defined(CONFIG_ARCH_MSM8916)
+						, match->desc
+#endif
+						);
 			if (!match->init_data) {
 				dev_err(dev,
 					"failed to parse DT for regulator %s\n",
@@ -409,7 +420,11 @@ struct regulator_init_data *regulator_of_get_init_data(struct device *dev,
 		if (strcmp(desc->of_match, name))
 			continue;
 
-		init_data = of_get_regulator_init_data(dev, child, desc);
+		init_data = of_get_regulator_init_data(dev, child
+#if !defined(CONFIG_ARCH_MSM8916)
+				, desc
+#endif
+				);
 		if (!init_data) {
 			dev_err(dev,
 				"failed to parse DT for regulator %s\n",

@@ -356,7 +356,11 @@ static struct fan53555_platform_data *fan53555_parse_dt(struct device *dev,
 	if (!pdata)
 		return NULL;
 
-	pdata->regulator = of_get_regulator_init_data(dev, np, desc);
+	pdata->regulator = of_get_regulator_init_data(dev, np
+#if !defined(CONFIG_ARCH_MSM8916)
+			, desc
+#endif
+			);
 
 	ret = of_property_read_u32(np, "fcs,suspend-voltage-selector",
 				   &tmp);

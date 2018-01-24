@@ -323,6 +323,20 @@ static int regulator_mode_constrain(struct regulator_dev *rdev, int *mode)
 	return -EINVAL;
 }
 
+/* dynamic regulator mode switching constraint check */
+static int regulator_check_drms(struct regulator_dev *rdev)
+{
+	if (!rdev->constraints) {
+		rdev_dbg(rdev, "no constraints\n");
+		return -ENODEV;
+	}
+	if (!(rdev->constraints->valid_ops_mask & REGULATOR_CHANGE_DRMS)) {
+		rdev_dbg(rdev, "operation not allowed\n");
+		return -EPERM;
+	}
+	return 0;
+}
+
 static ssize_t regulator_uV_show(struct device *dev,
 				struct device_attribute *attr, char *buf)
 {
