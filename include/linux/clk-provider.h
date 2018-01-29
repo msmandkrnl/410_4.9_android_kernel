@@ -833,7 +833,7 @@ static inline int of_clk_add_hw_provider(struct device_node *np,
 {
 	return 0;
 }
-static inline void of_clk_del_provider(struct device_node *np) {}
+void of_clk_del_provider(struct device_node *np);
 static inline struct clk *of_clk_src_simple_get(
 	struct of_phandle_args *clkspec, void *data)
 {
@@ -913,5 +913,30 @@ struct dentry *clk_debugfs_add_file(struct clk_hw *hw, char *name, umode_t mode,
 #endif
 
 #endif /* CONFIG_COMMON_CLK */
-static inline void __init of_clk_init(const struct of_device_id *matches) {}
+void __init of_clk_init(const struct of_device_id *matches);
+void of_clk_del_provider(struct device_node *np);
+// Changes
+typedef void (*of_clk_init_cb_t)(struct device_node *);
+
+/*
+ * flags used across common struct clk.  these flags should only affect the
+ * top-level framework.  custom flags for dealing with hardware specifics
+ * belong in struct clk_foo
+ */
+#define CLK_SET_RATE_GATE       BIT(0) /* must be gated across rate change */
+#define CLK_SET_PARENT_GATE     BIT(1) /* must be gated across re-parent */
+#define CLK_SET_RATE_PARENT     BIT(2) /* propagate rate change up one level */
+#define CLK_IGNORE_UNUSED       BIT(3) /* do not gate even if unused */
+                                /* unused */
+#define CLK_IS_BASIC            BIT(5) /* Basic clk, can't do a to_clk_foo() */
+#define CLK_GET_RATE_NOCACHE    BIT(6) /* do not use the cached clk rate */
+#define CLK_SET_RATE_NO_REPARENT BIT(7) /* don't re-parent on rate change */
+#define CLK_GET_ACCURACY_NOCACHE BIT(8) /* do not use the cached clk accuracy */
+#define CLK_RECALC_NEW_RATES    BIT(9) /* recalc rates after notifications */
+#define CLK_SET_RATE_UNGATE     BIT(10) /* clock needs to run to set rate */
+#define CLK_IS_CRITICAL         BIT(11) /* do not gate, ever */
+/* parents need enable during gate/ungate, set rate and re-parent */
+#define CLK_OPS_PARENT_ENABLE   BIT(12)
+
+extern struct of_device_id __clk_of_table;
 #endif /* CLK_PROVIDER_H */
