@@ -454,6 +454,42 @@ struct spmi_controller *spmi_controller_alloc(struct device *parent,
 }
 EXPORT_SYMBOL_GPL(spmi_controller_alloc);
 
+
+//Functionality is not supported.
+#if 0
+#define SPMI_MAX_RES_NAME 256
+
+/**
+ * spmi_get_resource_byname - get a resource for a device given a name
+ * @dev: spmi device handle
+ * @node: device node resource
+ * @type: resource type
+ * @name: resource name to lookup
+ */
+struct resource *spmi_get_resource_byname(struct spmi_device *dev,
+                                          struct spmi_resource *node,
+                                          unsigned int type,
+                                          const char *name)
+{
+        int i;
+
+        /* if a node is not specified, default to the first node */
+        if (!node)
+                node = &dev->res;
+
+        for (i = 0; i < node->num_resources; i++) {
+                struct resource *r = &node->resource[i];
+
+                if (type == resource_type(r) && r->name &&
+                                !strncmp(r->name, name, SPMI_MAX_RES_NAME))
+                        return r;
+        }
+        return NULL;
+}
+EXPORT_SYMBOL_GPL(spmi_get_resource_byname);
+#endif
+
+
 static void of_spmi_register_devices(struct spmi_controller *ctrl)
 {
 	struct device_node *node;

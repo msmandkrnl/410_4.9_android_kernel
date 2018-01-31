@@ -18,6 +18,7 @@
 #include <linux/init.h>
 #include <linux/kernel.h>
 #include <linux/lsm_hooks.h>
+#include <linux/security.h>
 #include <linux/integrity.h>
 #include <linux/ima.h>
 #include <linux/evm.h>
@@ -36,6 +37,20 @@
 /* Boot-time LSM user choice */
 static __initdata char chosen_lsm[SECURITY_NAME_MAX + 1] =
 	CONFIG_DEFAULT_SECURITY;
+
+static struct security_operations *security_ops;
+static struct security_operations default_security_ops = {
+	.name	= "default",
+};
+
+static inline int __init verify(struct security_operations *ops)
+{
+	/* verify the security_operations structure exists */
+	if (!ops)
+		return -EINVAL;
+	security_fixup_ops(ops);
+	return 0;
+}
 
 static void __init do_security_initcalls(void)
 {
@@ -97,6 +112,35 @@ int __init security_module_enable(const char *module)
 {
 	return !strcmp(module, chosen_lsm);
 }
+
+/**
+ * register_security - registers a security framework with the kernel
+ * @ops: a pointer to the struct security_options that is to be registered
+ *
+ * This function allows a security module to register itself with the
+ * kernel security subsystem.  Some rudimentary checking is done on the @ops
+ * value passed to this function. You'll need to check first if your LSM
+ * is allowed to register its @ops by calling security_module_enable(@ops).
+ *
+ * If there is already a security module registered with the kernel,
+ * an error will be returned.  Otherwise %0 is returned on success.
+ */
+int __init register_security(struct security_operations *ops)
+{
+	if (verify(ops)) {
+		printk(KERN_DEBUG "%s could not verify "
+		       "security_operations structure.\n", __func__);
+		return -EINVAL;
+	}
+
+	if (security_ops != &default_security_ops)
+		return -EAGAIN;
+
+	security_ops = ops;
+
+	return 0;
+}
+
 
 /*
  * Hook list operation macros.

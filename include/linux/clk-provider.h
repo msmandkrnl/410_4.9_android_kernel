@@ -13,6 +13,7 @@
 
 #include <linux/io.h>
 #include <linux/of.h>
+#include <linux/mod_devicetable.h>
 
 #ifdef CONFIG_COMMON_CLK
 
@@ -913,6 +914,7 @@ struct dentry *clk_debugfs_add_file(struct clk_hw *hw, char *name, umode_t mode,
 #endif
 
 #endif /* CONFIG_COMMON_CLK */
+extern struct of_device_id __clk_of_table;
 void __init of_clk_init(const struct of_device_id *matches);
 void of_clk_del_provider(struct device_node *np);
 // Changes
@@ -938,5 +940,4 @@ typedef void (*of_clk_init_cb_t)(struct device_node *);
 /* parents need enable during gate/ungate, set rate and re-parent */
 #define CLK_OPS_PARENT_ENABLE   BIT(12)
 
-extern struct of_device_id __clk_of_table;
 #endif /* CLK_PROVIDER_H */
