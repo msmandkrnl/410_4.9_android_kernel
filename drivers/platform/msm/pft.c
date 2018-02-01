@@ -206,27 +206,34 @@ static struct security_operations pft_security_ops = {
 	.allow_merge_bio	= pft_allow_merge_bio,
 };
 
+static struct security_hook_list pft_hooks[] = {
+        LSM_HOOK_INIT(inode_create, pft_inode_create),
+        LSM_HOOK_INIT(inode_post_create, pft_inode_post_create),
+        LSM_HOOK_INIT(inode_unlink, pft_inode_unlink),
+        LSM_HOOK_INIT(inode_mknod, pft_inode_mknod),
+        LSM_HOOK_INIT(inode_rename, pft_inode_rename),
+        LSM_HOOK_INIT(inode_setxattr, pft_inode_set_xattr),
+        LSM_HOOK_INIT(inode_alloc_security, pft_inode_alloc_security),
+        LSM_HOOK_INIT(inode_free_security, pft_inode_free_security),
+
+        LSM_HOOK_INIT(file_open, pft_file_open),
+        LSM_HOOK_INIT(file_permission, pft_file_permission),
+        LSM_HOOK_INIT(file_close, pft_file_close),
+};
+
 static int __init pft_lsm_init(struct pft_device *dev)
 {
-	int ret;
+  /* Check if PFT is the chosen lsm via security_module_enable() */
+        if (security_module_enable("pft")) {
+                security_add_hooks(pft_hooks, ARRAY_SIZE(pft_hooks));
+                dev->is_chosen_lsm = true;
+                pr_debug("pft is the chosen lsm, registered successfully !\n");
+        } else {
+                pr_err("pft is not the chosen lsm\n");
+                return -ENODEV;
+        }
 
-	/* Check if PFT is the chosen lsm via security_module_enable() */
-	if (security_module_enable(&pft_security_ops)) {
-		/* replace null callbacks with empty callbacks */
-		security_fixup_ops(&pft_security_ops);
-
-		ret = register_security(&pft_security_ops);
-		if (ret) {
-			pr_err("pft lsm registeration failed, ret=%d.\n", ret);
-			return 0;
-		}
-		dev->is_chosen_lsm = true;
-		pr_debug("pft is the chosen lsm, registered sucessfully !\n");
-	} else {
-		pr_debug("pft is not the chosen lsm.\n");
-	}
-
-	return 0;
+        return 0;
 }
 
 /**

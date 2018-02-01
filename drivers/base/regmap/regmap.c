@@ -20,6 +20,7 @@
 #include <linux/sched.h>
 #include <linux/delay.h>
 #include <linux/log2.h>
+#include <linux/regmap.h>
 
 #define CREATE_TRACE_POINTS
 #include "trace.h"

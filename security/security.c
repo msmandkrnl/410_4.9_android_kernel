@@ -48,7 +48,7 @@ static inline int __init verify(struct security_operations *ops)
 	/* verify the security_operations structure exists */
 	if (!ops)
 		return -EINVAL;
-	security_fixup_ops(ops);
+	//security_fixup_ops(ops);
 	return 0;
 }
 

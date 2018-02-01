@@ -777,7 +777,7 @@ struct clk_hw_onecell_data {
 	struct clk_hw *hws[];
 };
 
-extern struct of_device_id __clk_of_table;
+//struct of_device_id __clk_of_table;
 
 #define CLK_OF_DECLARE(name, compat, fn) OF_DECLARE_1(clk, name, compat, fn)
 
@@ -914,7 +914,7 @@ struct dentry *clk_debugfs_add_file(struct clk_hw *hw, char *name, umode_t mode,
 #endif
 
 #endif /* CONFIG_COMMON_CLK */
-extern struct of_device_id __clk_of_table;
+struct of_device_id __clk_of_table;
 void __init of_clk_init(const struct of_device_id *matches);
 void of_clk_del_provider(struct device_node *np);
 // Changes
