@@ -3416,6 +3416,7 @@ int of_clk_detect_critical(struct device_node *np,
 	return 0;
 }
 
+#if defined(CONFIG_COMMON_CLK)
 /**
  * of_clk_init() - Scan and init clock providers from the DT
  * @matches: array of compatible values and init functions for providers.
@@ -3424,6 +3425,7 @@ int of_clk_detect_critical(struct device_node *np,
  * and calls their initialization functions. It also does it by trying
  * to follow the dependencies.
  */
+
 void __init of_clk_init(const struct of_device_id *matches)
 {
 	const struct of_device_id *match;
@@ -3490,4 +3492,5 @@ void __init of_clk_init(const struct of_device_id *matches)
 			force = true;
 	}
 }
+#endif
 #endif

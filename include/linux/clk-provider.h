@@ -13,7 +13,7 @@
 
 #include <linux/io.h>
 #include <linux/of.h>
-#include <linux/mod_devicetable.h>
+//#include <linux/mod_devicetable.h>
 
 #ifdef CONFIG_COMMON_CLK
 
@@ -777,7 +777,7 @@ struct clk_hw_onecell_data {
 	struct clk_hw *hws[];
 };
 
-//struct of_device_id __clk_of_table;
+//extern struct of_device_id __clk_of_table;
 
 #define CLK_OF_DECLARE(name, compat, fn) OF_DECLARE_1(clk, name, compat, fn)
 
@@ -913,9 +913,13 @@ struct dentry *clk_debugfs_add_file(struct clk_hw *hw, char *name, umode_t mode,
 				void *data, const struct file_operations *fops);
 #endif
 
-#endif /* CONFIG_COMMON_CLK */
-struct of_device_id __clk_of_table;
-void __init of_clk_init(const struct of_device_id *matches);
+#else /* CONFIG_COMMON_CLK */
+//void __init of_clk_init(const struct of_device_id *matches);
+static inline void __init of_clk_init(const struct of_device_id *matches)
+{
+        return;
+}
+
 void of_clk_del_provider(struct device_node *np);
 // Changes
 typedef void (*of_clk_init_cb_t)(struct device_node *);
@@ -940,4 +944,5 @@ typedef void (*of_clk_init_cb_t)(struct device_node *);
 /* parents need enable during gate/ungate, set rate and re-parent */
 #define CLK_OPS_PARENT_ENABLE   BIT(12)
 
+#endif /* CONFIG_COMMON_CLK */
 #endif /* CLK_PROVIDER_H */
