@@ -62,6 +62,10 @@ config QCOM_SMP2P
 	  Say yes here to support the Qualcomm Shared Memory Point to Point
 	  protocol.
 
+config MSM_SCM
+	bool "Secure Channel Manager (SCM) support"
+	default n
+
 config QCOM_SMSM
 	tristate "Qualcomm Shared Memory State Machine"
 	depends on QCOM_SMEM
